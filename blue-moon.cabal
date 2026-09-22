@@ -1,0 +1,235 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           blue-moon
+version:        0.0.0
+build-type:     Simple
+
+flag dev
+  description: Turn on development settings, like auto-reload templates.
+  manual: False
+  default: False
+
+flag force-static-files-recomp
+  description: Recompile Settings.StaticFiles module
+  manual: False
+  default: False
+
+flag ide-info
+  description: Write ide-info into .hie dir
+  manual: False
+  default: True
+
+flag library-only
+  description: Build for use with "yesod devel"
+  manual: False
+  default: False
+
+library
+  exposed-modules:
+      Application
+      Common
+  other-modules:
+      Paths_blue_moon
+  hs-source-dirs:
+      src
+  default-extensions:
+      ApplicativeDo
+      DataKinds
+      DeepSubsumption
+      DeriveAnyClass
+      DerivingStrategies
+      DerivingVia
+      DuplicateRecordFields
+      GADTs
+      LambdaCase
+      MultiWayIf
+      NoImplicitPrelude
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RecordWildCards
+      StrictData
+      UndecidableInstances
+      TemplateHaskell
+      ViewPatterns
+  build-depends:
+      base >=4.9.1.0 && <5
+    , blue-models
+    , blue-prelude
+  default-language: GHC2021
+  if flag(ide-info)
+    ghc-options: -fwrite-ide-info -hiedir=.hie -Werror -Wall -fwarn-tabs -Wunused-packages
+  else
+    ghc-options: -Werror -Wall -fwarn-tabs -Wunused-packages
+  if (flag(dev)) || (flag(library-only))
+    ghc-options: -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -O0 -fobject-code
+    cpp-options: -DDEVELOPMENT
+  else
+    ghc-options: -O
+  if flag(force-static-files-recomp)
+    cpp-options: -DFORCE_STATIC_FILES_RECOMP
+
+executable blue-moon
+  main-is: main.hs
+  other-modules:
+      DevelMain
+  hs-source-dirs:
+      app
+  default-extensions:
+      ApplicativeDo
+      DataKinds
+      DeepSubsumption
+      DeriveAnyClass
+      DerivingStrategies
+      DerivingVia
+      DuplicateRecordFields
+      GADTs
+      LambdaCase
+      MultiWayIf
+      NoImplicitPrelude
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RecordWildCards
+      StrictData
+      UndecidableInstances
+      TemplateHaskell
+      ViewPatterns
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -with-rtsopts=-T
+  build-depends:
+      base >=4.9.1.0 && <5
+    , blue-moon
+  default-language: GHC2021
+  if flag(ide-info)
+    ghc-options: -fwrite-ide-info -hiedir=.hie -Werror -Wall -fwarn-tabs -Wunused-packages
+  else
+    ghc-options: -Werror -Wall -fwarn-tabs -Wunused-packages
+  if flag(library-only)
+    buildable: False
+
+executable generate-openapi
+  main-is: generate-openapi.hs
+  other-modules:
+      Paths_blue_moon
+  hs-source-dirs:
+      openapi
+  default-extensions:
+      ApplicativeDo
+      DataKinds
+      DeepSubsumption
+      DeriveAnyClass
+      DerivingStrategies
+      DerivingVia
+      DuplicateRecordFields
+      GADTs
+      LambdaCase
+      MultiWayIf
+      NoImplicitPrelude
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RecordWildCards
+      StrictData
+      UndecidableInstances
+      TemplateHaskell
+      ViewPatterns
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.9.1.0 && <5
+    , blue-models
+    , blue-moon
+    , blue-prelude
+  default-language: GHC2021
+  if flag(ide-info)
+    ghc-options: -fwrite-ide-info -hiedir=.hie -Werror -Wall -fwarn-tabs -Wunused-packages
+  else
+    ghc-options: -Werror -Wall -fwarn-tabs -Wunused-packages
+
+executable migrate
+  main-is: migrate.hs
+  other-modules:
+      DevelMain
+      Paths_blue_moon
+  hs-source-dirs:
+      app
+  default-extensions:
+      ApplicativeDo
+      DataKinds
+      DeepSubsumption
+      DeriveAnyClass
+      DerivingStrategies
+      DerivingVia
+      DuplicateRecordFields
+      GADTs
+      LambdaCase
+      MultiWayIf
+      NoImplicitPrelude
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RecordWildCards
+      StrictData
+      UndecidableInstances
+      TemplateHaskell
+      ViewPatterns
+  build-depends:
+      base >=4.9.1.0 && <5
+    , blue-models
+    , blue-moon
+  default-language: GHC2021
+  if flag(ide-info)
+    ghc-options: -fwrite-ide-info -hiedir=.hie -Werror -Wall -fwarn-tabs -Wunused-packages
+  else
+    ghc-options: -Werror -Wall -fwarn-tabs -Wunused-packages
+
+test-suite test
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Unit.CommonSpec
+      Unit.Spec
+  hs-source-dirs:
+      test
+  default-extensions:
+      ApplicativeDo
+      DataKinds
+      DeepSubsumption
+      DeriveAnyClass
+      DerivingStrategies
+      DerivingVia
+      DuplicateRecordFields
+      GADTs
+      LambdaCase
+      MultiWayIf
+      NoImplicitPrelude
+      OverloadedLabels
+      OverloadedRecordDot
+      OverloadedStrings
+      QuasiQuotes
+      RecordWildCards
+      StrictData
+      UndecidableInstances
+      TemplateHaskell
+      ViewPatterns
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-tool-depends:
+      sydtest-discover:sydtest-discover
+  build-depends:
+      base >=4.9.1.0 && <5
+    , blue-models
+    , blue-moon
+    , blue-prelude
+    , sydtest
+  default-language: GHC2021
+  if flag(ide-info)
+    ghc-options: -fwrite-ide-info -hiedir=.hie -Werror -Wall -fwarn-tabs -Wunused-packages
+  else
+    ghc-options: -Werror -Wall -fwarn-tabs -Wunused-packages

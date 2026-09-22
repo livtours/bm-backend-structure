@@ -1,0 +1,84 @@
+name:    blue-models
+version: "0.0.0"
+language: GHC2021
+
+dependencies:
+- base >= 4.9.1.0 && <5
+- blue-prelude
+
+default-extensions:
+- ApplicativeDo
+# - BangPatterns
+- ConstraintKinds
+- DataKinds
+# - DeriveGeneric
+- DeriveAnyClass
+- DerivingStrategies
+- FlexibleContexts
+- GADTs
+# - InstanceSigs
+- LambdaCase
+- MultiWayIf
+- NoImplicitPrelude
+- OverloadedStrings
+- QuasiQuotes
+# - RankNTypes
+- RecordWildCards
+- ScopedTypeVariables
+- StandaloneDeriving
+- StrictData
+- UndecidableInstances
+- TemplateHaskell
+- TypeApplications
+- ViewPatterns
+
+when:
+  - condition: flag(ide-info)
+    then:
+      ghc-options:
+        - -fwrite-ide-info
+        - -hiedir=.hie
+        - -Werror
+        - -Wall
+        - -fwarn-tabs
+    else:
+      ghc-options:
+        - -Werror
+        - -Wall
+        - -fwarn-tabs
+
+# The library contains all of our application code. The executable
+# defined below is just a thin wrapper.
+library:
+  source-dirs: src
+  when:
+  - condition: (flag(dev)) || (flag(library-only))
+    then:
+      ghc-options:
+      - -Wcompat
+      - -Wincomplete-record-updates
+      - -Wincomplete-uni-patterns
+      - -Wredundant-constraints
+      - -O0
+      - -fobject-code
+
+      cpp-options: -DDEVELOPMENT
+    else:
+      ghc-options:
+      - -O
+
+
+# Define flags used by "yesod devel" to make compilation faster
+flags:
+  library-only:
+    description: Build for use with "yesod devel"
+    manual: false
+    default: false
+  dev:
+    description: Turn on development settings, like auto-reload templates.
+    manual: false
+    default: false
+  ide-info:
+    description: Write ide-info into .hie dir
+    manual: false
+    default: true

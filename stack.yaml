@@ -1,0 +1,10 @@
+resolver: lts-24.14
+
+packages:
+  - .
+  - blue-prelude
+  - blue-models
+
+allow-newer: true
+
+notify-if-nix-on-path: false

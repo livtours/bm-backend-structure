@@ -1,0 +1,66 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.39.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           blue-models
+version:        0.0.0
+build-type:     Simple
+
+flag dev
+  description: Turn on development settings, like auto-reload templates.
+  manual: False
+  default: False
+
+flag ide-info
+  description: Write ide-info into .hie dir
+  manual: False
+  default: True
+
+flag library-only
+  description: Build for use with "yesod devel"
+  manual: False
+  default: False
+
+library
+  exposed-modules:
+      Model.Fields
+  other-modules:
+      Paths_blue_models
+  hs-source-dirs:
+      src
+  default-extensions:
+      ApplicativeDo
+      ConstraintKinds
+      DataKinds
+      DeriveAnyClass
+      DerivingStrategies
+      FlexibleContexts
+      GADTs
+      LambdaCase
+      MultiWayIf
+      NoImplicitPrelude
+      OverloadedStrings
+      QuasiQuotes
+      RecordWildCards
+      ScopedTypeVariables
+      StandaloneDeriving
+      StrictData
+      UndecidableInstances
+      TemplateHaskell
+      TypeApplications
+      ViewPatterns
+  build-depends:
+      base >=4.9.1.0 && <5
+    , blue-prelude
+  default-language: GHC2021
+  if flag(ide-info)
+    ghc-options: -fwrite-ide-info -hiedir=.hie -Werror -Wall -fwarn-tabs
+  else
+    ghc-options: -Werror -Wall -fwarn-tabs
+  if (flag(dev)) || (flag(library-only))
+    ghc-options: -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -O0 -fobject-code
+    cpp-options: -DDEVELOPMENT
+  else
+    ghc-options: -O

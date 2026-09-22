@@ -1,0 +1,6 @@
+session:
+  command: stack repl blue-moon:lib blue-moon:test:test --test blue-moon:test:test --ghc-options="$GHC_OPTIONS -j -Wno-deprecations" --ghci-options="-ignore-dot-ghci"
+  watch_dirs: [blue-models,blue-prelude,src,test]
+  test_targets: [blue-moon:test:test]
+  test_timeout: 60
+  generate_with_hpack: true

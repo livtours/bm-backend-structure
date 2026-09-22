@@ -1,0 +1,9 @@
+--warnings
+--command="stack --system-ghc ghci blue-moon:lib --no-load --ghc-options='-j8 +RTS -A128m -n2m -qg -T -RTS'"
+--reload=src
+--reload=test
+--test=":!stack --system-ghc test --fast --ghc-options=\"-j8 +RTS -A128m -n2m -RTS\""
+--test="DevelMain.update"
+--restart=./blue-moon.cabal
+--restart=./blue-models/blue-models.cabal
+--restart=./blue-prelude/blue-prelude.cabal

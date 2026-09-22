@@ -1,0 +1,145 @@
+name: blue-moon
+version: "0.0.0"
+language: GHC2021
+
+dependencies:
+  base: ">= 4.9.1.0 && <5"
+
+default-extensions:
+  - ApplicativeDo
+  - DataKinds
+  - DeepSubsumption
+  - DeriveAnyClass
+  - DerivingStrategies
+  - DerivingVia
+  - DuplicateRecordFields
+  - GADTs
+  - LambdaCase
+  - MultiWayIf
+  - NoImplicitPrelude
+  - OverloadedLabels
+  - OverloadedRecordDot
+  - OverloadedStrings
+  - QuasiQuotes
+  - RecordWildCards
+  - StrictData
+  - UndecidableInstances
+  - TemplateHaskell
+  - ViewPatterns
+
+when:
+  - condition: flag(ide-info)
+    then:
+      ghc-options:
+        - -fwrite-ide-info
+        - -hiedir=.hie
+        - -Werror
+        - -Wall
+        - -fwarn-tabs
+        - -Wunused-packages
+    else:
+      ghc-options:
+        - -Werror
+        - -Wall
+        - -fwarn-tabs
+        - -Wunused-packages
+
+_common-dependencies: &common-dependencies
+  blue-models:
+  blue-prelude:
+
+library:
+  source-dirs: src
+  when:
+    - condition: (flag(dev)) || (flag(library-only))
+      then:
+        ghc-options:
+          - -Wcompat
+          - -Wincomplete-record-updates
+          - -Wincomplete-uni-patterns
+          - -Wredundant-constraints
+          - -O0
+          - -fobject-code
+
+        cpp-options: -DDEVELOPMENT
+      else:
+        ghc-options:
+          - -O
+    - condition: flag(force-static-files-recomp)
+      cpp-options: -DFORCE_STATIC_FILES_RECOMP
+  dependencies:
+    <<: *common-dependencies
+
+executables:
+  blue-moon:
+    main: main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -with-rtsopts=-T
+    dependencies:
+      blue-moon:
+    when:
+      - condition: flag(library-only)
+        buildable: false
+      - condition: false
+        other-modules: Paths_blue_moon
+
+  migrate:
+    main: migrate.hs
+    source-dirs: app
+    dependencies:
+      blue-models:
+      blue-moon:
+
+  generate-openapi:
+    main: generate-openapi.hs
+    source-dirs: openapi
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+
+    dependencies:
+      blue-prelude:
+      blue-moon:
+      blue-models:
+
+# Test suite
+tests:
+  test:
+    main: Main.hs
+    source-dirs: test
+    build-tools: sydtest-discover
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      <<: *common-dependencies
+      blue-moon:
+      sydtest:
+    when:
+      - condition: false
+        other-modules: Paths_blue_moon
+
+# Define flags used by "yesod devel" to make compilation faster
+flags:
+  library-only:
+    description: Build for use with "yesod devel"
+    manual: false
+    default: false
+  dev:
+    description: Turn on development settings, like auto-reload templates.
+    manual: false
+    default: false
+  ide-info:
+    description: Write ide-info into .hie dir
+    manual: false
+    default: true
+  force-static-files-recomp:
+    description: Recompile Settings.StaticFiles module
+    manual: false
+    default: false

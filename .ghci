@@ -1,0 +1,32 @@
+:set -DDEVELOPMENT
+:set -i./src:./test
+:set -fobject-code
+:set -outputdir .build-cache
+:set -O0
+:set -j8
+:set +s
+:set +t
+:set -fwrite-ide-info
+:set -hiedir=.hie
+:set -freverse-errors
+:set -Wall
+:set -Wincomplete-uni-patterns
+:set -Wincomplete-record-updates
+:set -Widentities
+:set -Wredundant-constraints
+:set -Wcpp-undef
+:set -Wimplicit-prelude
+:set -Wno-type-defaults
+:set -XNoImplicitPrelude
+:set -Werror=incomplete-patterns
+:set -Werror=missing-fields
+:m -Prelude
+:m +ClassyPrelude.Yesod
+:set prompt "GHCi> "
+:def! test const . return $ ":!clear\n:l test/Main.hs\nmain\n:!tput bel"
+:def! serve const . return $ ":l app/DevelMain\nDevelMain.update\n:!tput bel"
+:def! hlint const . return $ ":! hlint ./src ./test ./app:!tput bel"
+-- :set -optl-fuse-ld=ld-wrapper-macos.sh
+:set -package foreign-store
+:l app/DevelMain.hs
+DevelMain.update
